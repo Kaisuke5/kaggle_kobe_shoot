@@ -61,7 +61,7 @@ class shoot_network():
 		for epoch in six.moves.range(1, n_epoch + 1):
 			print('epoch', epoch)
 			# training
-			perm = self.xp.random.permutation(N)
+			perm = np.random.permutation(N)
 			sum_accuracy = 0
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
