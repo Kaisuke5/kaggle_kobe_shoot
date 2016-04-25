@@ -49,8 +49,8 @@ class shoot_network():
 
 
 	def fit(self,x_train,y_train,n_epoch=100, batchsize=30):
-		x_train = self.xp.array(x_train, self.xp.float32)
-		y_train = self.xp.array(y_train, self.xp.float32).reshape(len(y_train),1)
+		x_train = np.array(x_train, np.float32)
+		y_train = np.array(y_train, np.float32).reshape(len(y_train),1)
 		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=30)
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
@@ -65,6 +65,7 @@ class shoot_network():
 			sum_accuracy = 0
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
+				print self.xp.asarray(x_train[perm[i:i + batchsize]])
 				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
 				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
 				# Pass the loss function (Classifier defines it) and its arguments
