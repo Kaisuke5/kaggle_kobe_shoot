@@ -32,30 +32,41 @@ class network(chainer.Chain):
 
 class shoot_network():
 
-	def __init__(self,units=300):
+	def __init__(self,units=300,gpu=-1):
 		self.units = units
 		self.model = None
+		self.gpu = gpu
+
+		self.gpu = gpu
+		if self.gpu >= 0:
+			from chainer import cuda
+			self.xp = cuda.cupy
+			cuda.get_device(self.gpu).use()
+		else:
+			self.xp = self.xp
+
+
+
 
 	def fit(self,x_train,y_train,n_epoch=100, batchsize=30):
-		x_train = np.array(x_train, np.float32)
-		y_train = np.array(y_train, np.float32).reshape(len(y_train),1)
+		x_train = self.xp.array(x_train, self.xp.float32)
+		y_train = self.xp.array(y_train, self.xp.float32).reshape(len(y_train),1)
 		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=30)
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
 		self.model = network(len(x_train[0]),self.units,1)
-		xp = np
 		optimizer = optimizers.Adam()
 		optimizer.setup(self.model)
 		N = len(x_train)
 		for epoch in six.moves.range(1, n_epoch + 1):
 			print('epoch', epoch)
 			# training
-			perm = np.random.permutation(N)
+			perm = self.xp.random.permutation(N)
 			sum_accuracy = 0
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
-				x = chainer.Variable(xp.asarray(x_train[perm[i:i + batchsize]]))
-				t = chainer.Variable(xp.asarray(y_train[perm[i:i + batchsize]]))
+				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
+				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
 				# Pass the loss function (Classifier defines it) and its arguments
 				optimizer.update(self.model, x, t)
 
@@ -65,7 +76,7 @@ class shoot_network():
 
 
 	def predict(self,test_x):
-		x = chainer.Variable(np.asarray(test_x, np.float32))
+		x = chainer.Variable(self.xp.asarray(test_x, self.xp.float32))
 		t = self.model.predict(x)
 		return t.data
 

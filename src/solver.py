@@ -3,12 +3,16 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn import cross_validation
 import model
-
+import argparse
 
 
 def factorize(data):
 	return (data - np.mean(data,axis = 0)) / np.var(data,axis = 0)
 
+
+parser = argparse.ArgumentParser(description='kaggle kobe')
+parser.add_argument('--gpu', '-g', default=-1, type=int,help='gpu -1')
+args = parser.parse_args()
 
 N = 30696
 M = 5000
@@ -56,7 +60,7 @@ train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
-sn = model.shoot_network(units=150)
+sn = model.shoot_network(units=150,gpu=args.gpu)
 
 sn.fit(train_x,train_y,n_epoch=200,batchsize=1000)
 # result = np.sqrt(np.sum(np.square(y-y_test)))
