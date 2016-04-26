@@ -70,7 +70,7 @@ for u in units:
 	for b in batchsize:
 		for n in n_epoch:
 			error = 0
-			for i in range(5):
+			for i in range(3):
 				X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
 				sn = model.shoot_network(units=u,gpu=args.gpu)
 				sn.fit(X_train,y_train,n_epoch=n,batchsize=b)
@@ -80,5 +80,6 @@ for u in units:
 			s = '%5.2f,%d,%d,%d\n' % (error/5,u,b,n)
 			file = open('validation.csv','a')
 			file.write(s)
+			file.close()
 
 file.close()
