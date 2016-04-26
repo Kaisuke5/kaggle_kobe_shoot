@@ -74,8 +74,8 @@ class shoot_network():
 				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
 				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
 				if self.gpu >= 0:
-					x = cuda.to_gpu(x)
-					y = cuda.to_gpu(t)
+					x = x.to_gpu()
+					y = t.to_gpu()
 				# Pass the loss function (Classifier defines it) and its arguments
 				optimizer.update(self.model, x, t)
 				sum_loss += float(self.model.loss.data) / N
