@@ -52,12 +52,13 @@ class shoot_network():
 		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=30)
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
+		self.model = network(len(x_train[0]),self.units,1)
 		if self.gpu >= 0:
 			print 'model to gpu'
-			self.model = network(len(x_train[0]),self.units,1).to_gpu()
+			self.model.to_gpu()
 			print type(self.model)
-		else:
-			self.model = network(len(x_train[0]),self.units,1)
+
+
 
 
 		optimizer = optimizers.Adam()
@@ -70,9 +71,14 @@ class shoot_network():
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
 
-				x = chainer.Variable(cuda.to_gpu(x_train[perm[i:i + batchsize]]))
-				t = chainer.Variable(cuda.to_gpu(y_train[perm[i:i + batchsize]]))
+				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
+				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
 				# Pass the loss function (Classifier defines it) and its arguments
+
+				if self.gpu >= 0:
+					x = cuda.to_gpu(x)
+					t = cuda.to_gpu(t)
+
 				optimizer.update(self.model, x, t)
 				sum_loss += float(self.model.loss.data) / N
 
