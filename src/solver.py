@@ -59,36 +59,56 @@ train_x = train_x.values
 train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
-X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
-sn = model.shoot_network(units=150,gpu=args.gpu)
 
-sn.fit(train_x,train_y,n_epoch=10,batchsize=500)
-# result = np.sqrt(np.sum(np.square(y-y_test)))
+n_epoch = [100,200,300]
+units = [100,200,300,500]
+batchsize = [100,500,1000]
+
+
+n_epoch = [1,2]
+units = [1,2]
+batchsize = [100,500]
+
+
+
+
+
+file = open('validation.txt','w')
+for u in units:
+	for b in batchsize:
+		for n in n_epoch:
+
+			X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
+			sn = model.shoot_network(units=u,gpu=args.gpu)
+			sn.fit(X_train,y_train,n_epoch=n,batchsize=b)
+			result = sn.predict(X_test)[:,0]
+			ans = np.sum((result - y_test) * (result - y_test))
+			s = '%5.2f units:%d,batchsize:%d,n_epoch:%d\n' % (ans,u,b,n)
+			file.write(s)
+
+file.close()
+
 #
-# units = [100,120,150,200,250,300]
-# f = open('cross.txt','w')
-# for u in units:
-# 	X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
-# 	sn = model.shoot_network()
-# 	sn.fit(train_x,train_y,n_units=u,n_epoch=150,batchsize=100)
-# 	y = sn.predict(X_test)
-# 	# y[y > 0.60] = 1
-# 	# y[y < 0.40] = 0
-# 	result = np.sqrt(np.sum(np.square(y-y_test)))
-# 	f.write(str(u)+ ' ' + str(result) + " " + str(np.mean(y)) + '\n')
-
-
-ans = sn.predict(test_x)
-count  = 0
-test_data = data[pd.isnull(data.shot_made_flag)]
-for i,row in test_data.iterrows():
-	#print count,i
-	result = ans[count][0]
-	if result > 1: result = 1
-	elif result < 0: result = 0
-	output.write(str(row['shot_id'])+","+str(result)+'\n')
-	count += 1
-
-output.close()
 #
+# X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
+# sn = model.shoot_network(units=150,gpu=args.gpu)
+# sn.fit(train_x,train_y,n_epoch=10,batchsize=500)
+#
+
+
+# answear csv
+#
+#
+# ans = sn.predict(test_x)
+# count  = 0
+# test_data = data[pd.isnull(data.shot_made_flag)]
+# for i,row in test_data.iterrows():
+# 	#print count,i
+# 	result = ans[count][0]
+# 	if result > 1: result = 1
+# 	elif result < 0: result = 0
+# 	output.write(str(row['shot_id'])+","+str(result)+'\n')
+# 	count += 1
+#
+# output.close()
 #
