@@ -43,9 +43,7 @@ class shoot_network():
 			self.xp = cuda.cupy
 			cuda.get_device(self.gpu).use()
 		else:
-			self.xp = self.xp
-
-
+			self.xp = np
 
 
 	def fit(self,x_train,y_train,n_epoch=100, batchsize=30):
@@ -55,6 +53,7 @@ class shoot_network():
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
 		self.model = network(len(x_train[0]),self.units,1)
+		self.model.to_gpu()
 		optimizer = optimizers.Adam()
 		optimizer.setup(self.model)
 		N = len(x_train)
@@ -65,7 +64,7 @@ class shoot_network():
 			sum_accuracy = 0
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
-				print self.xp.asarray(x_train[perm[i:i + batchsize]])
+
 				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
 				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
 				# Pass the loss function (Classifier defines it) and its arguments
@@ -74,6 +73,16 @@ class shoot_network():
 				sum_loss += float(self.model.loss.data) / N
 
 			print 'epoch %d mean_squared_error:%f' % (epoch,sum_loss)
+
+
+
+	# def to_gpu(self, device=None):
+	# 	with cuda.get_device(device):
+	# 		super(chainer.Chain, self).to_gpu()
+	# 		d = self.__dict__
+	# 		for name in self._children:
+	# 			d[name].to_gpu()
+	# 	return self
 
 
 	def predict(self,test_x):
