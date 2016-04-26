@@ -12,6 +12,12 @@ def factorize(data):
 
 parser = argparse.ArgumentParser(description='kaggle kobe')
 parser.add_argument('--gpu', '-g', default=-1, type=int,help='gpu -1')
+parser.add_argument('--units', '-u', default=0, type=int,help='units')
+parser.add_argument('--epoch', '-n', default=0, type=int,help='epoch')
+parser.add_argument('--batchsize', '-b', default=0, type=int,help='batchsize')
+
+
+
 args = parser.parse_args()
 
 N = 30696
@@ -59,8 +65,8 @@ train_x = train_x.values
 train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
-sn = model.shoot_network(units=1200,gpu=args.gpu)
-sn.fit(train_x,train_y,n_epoch=200,batchsize=1000,save=True)
+sn = model.shoot_network(units=args.units,gpu=args.gpu)
+sn.fit(train_x,train_y,n_epoch=args.epoch,batchsize=args.batchsize,save=True)
 
 ans = sn.predict(test_x)
 count  = 0
