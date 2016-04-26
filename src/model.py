@@ -98,10 +98,10 @@ class shoot_network():
 
 	def predict(self,test_x):
 		x = chainer.Variable(self.xp.asarray(test_x, self.xp.float32))
-		t = self.model.predict(x)
+		result = self.model.predict(x).data
 		if self.gpu >=0:
-			t = cuda.to_cpu(t)
-		return t.data
+			result = cuda.to_cpu(result)
+		return result
 
 
 
