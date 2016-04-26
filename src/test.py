@@ -32,7 +32,6 @@ lst = ['lat','loc_x','loc_y','lon','minutes_remaining','playoffs','seconds_remai
 cols = ['action_type','shot_type','shot_zone_basic','shot_zone_area','shot_zone_range', 'season','opponent']
 # lst = ['playoffs','seconds_remaining','shot_distance']
 
-
 data_x = data[lst]
 
 for col in cols:
@@ -40,21 +39,27 @@ for col in cols:
 	data_x = pd.concat((data_x,d),axis=1)
 
 data_x = factorize(data_x)
-train_x = data_x[-pd.isnull(data_x.shot_made_flag)]
-test_x = data_x[pd.isnull(data_x.shot_made_flag)]
-del test_x['shot_made_flag']
-del train_x['shot_made_flag']
-test_x = test_x.values
-train_x = train_x.values
+train_data = data_x[-pd.isnull(data_x.shot_made_flag)]
+test_data = data_x[pd.isnull(data_x.shot_made_flag)]
+del train_data['shot_made_flag']
+del test_data['shot_made_flag']
+test_x = test_data.values
+train_x = train_data.values
 train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
+
+
+print test_x,test_data
+
+
 
 
 sn = model.shoot_network(units=args.units,gpu=args.gpu)
 sn.fit(train_x,train_y,n_epoch=args.epoch,batchsize=args.batchsize,save=True)
-
 ans = sn.predict(test_x)
 count  = 0
-test_data = data[pd.isnull(data.shot_made_flag)]
+test_data = test_x
+
+
 for i,row in test_data.iterrows():
 	#print count,i
 	result = ans[count][0]
