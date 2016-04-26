@@ -71,8 +71,8 @@ class shoot_network():
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
 
-				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
-				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
+				x = chainer.Variable(x_train[perm[i:i + batchsize]])
+				t = chainer.Variable(y_train[perm[i:i + batchsize]])
 				# Pass the loss function (Classifier defines it) and its arguments
 
 				if self.gpu >= 0:
