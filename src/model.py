@@ -11,7 +11,7 @@ from chainer import optimizers
 
 class network(chainer.Chain):
 
-	def __init__(self, n_in, n_units, n_out):
+	def __init__(self, n_in, n_units, n_out,):
 		super(network, self).__init__(
 			l1=L.Linear(n_in, n_units),
 			l2=L.Linear(n_units, n_units),
@@ -52,11 +52,12 @@ class shoot_network():
 		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=30)
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
-		self.model = network(len(x_train[0]),self.units,1)
-
 		if self.gpu >= 0:
 			print 'model to gpu'
-			self.model.to_gpu()
+			self.model = network(len(x_train[0]),self.units,1).to_gpu()
+
+		else:
+			self.model = network(len(x_train[0]),self.units,1)
 
 
 		optimizer = optimizers.Adam()
@@ -72,9 +73,11 @@ class shoot_network():
 
 				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
 				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
+				if self.gpu >= 0:
+					x = cuda.to_gpu(x)
+					y = cuda.to_gpu(t)
 				# Pass the loss function (Classifier defines it) and its arguments
 				optimizer.update(self.model, x, t)
-
 				sum_loss += float(self.model.loss.data) / N
 
 			print 'epoch %d mean_squared_error:%f' % (epoch,sum_loss)
