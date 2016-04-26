@@ -1,8 +1,8 @@
-9302.11 units:1,batchsize:100,n_epoch:1
-2898.93 units:1,batchsize:100,n_epoch:2
-4285.90 units:1,batchsize:500,n_epoch:1
-4041.67 units:1,batchsize:500,n_epoch:2
-3007.85 units:2,batchsize:100,n_epoch:1
-4365.51 units:2,batchsize:100,n_epoch:2
-628291.43 units:2,batchsize:500,n_epoch:1
-236900.09 units:2,batchsize:500,n_epoch:2
+3476.44 units:1,batchsize:100,n_epoch:1
+2902.04 units:1,batchsize:100,n_epoch:2
+4285.10 units:1,batchsize:500,n_epoch:1
+4039.72 units:1,batchsize:500,n_epoch:2
+9448.73 units:2,batchsize:100,n_epoch:1
+79405.75 units:2,batchsize:100,n_epoch:2
+22677.60 units:2,batchsize:500,n_epoch:1
+239894.72 units:2,batchsize:500,n_epoch:2

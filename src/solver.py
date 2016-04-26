@@ -61,13 +61,13 @@ train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
 n_epoch = [100,200,300]
-units = [100,200,300,500]
+units = [100,200,300,500,1000]
 batchsize = [100,500,1000]
 
-
-n_epoch = [1,2]
-units = [1,2]
-batchsize = [100,500]
+#
+# n_epoch = [1,2]
+# units = [1,2]
+# batchsize = [100,500]
 
 
 
@@ -83,6 +83,7 @@ for u in units:
 			sn.fit(X_train,y_train,n_epoch=n,batchsize=b)
 			result = sn.predict(X_test)[:,0]
 			ans = np.sum((result - y_test) * (result - y_test))
+
 			s = '%5.2f units:%d,batchsize:%d,n_epoch:%d\n' % (ans,u,b,n)
 			file.write(s)
 
