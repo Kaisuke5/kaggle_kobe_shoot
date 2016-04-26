@@ -7,7 +7,7 @@ import argparse
 
 
 def factorize(data):
-	return (data - np.mean(data,axis = 0)) / np.var(data,axis = 0)
+	return (data - np.mean(data,axis = 0)) / np.std(data,axis = 0)
 
 
 parser = argparse.ArgumentParser(description='kaggle kobe')
@@ -23,30 +23,20 @@ output = open('output.csv', 'w')
 output.write('shot_id,shot_made_flag\n')
 
 
-train_lst = ['shot_id','lat','loc_x','loc_y','lon','minutes_remaining','playoffs','seconds_remaining','shot_distance','shot_made_flag']
-lst = ['lat','loc_x','loc_y','lon','minutes_remaining','playoffs','seconds_remaining','shot_distance','shot_made_flag']
-cols = ['combined_shot_type', 'shot_zone_range', 'season','period']
+train_lst = ['shot_id','lat','loc_x','loc_y','lon','minutes_remaining','playoffs','seconds_remaining','shot_distance','period','shot_made_flag']
+
+
+lst = ['lat','loc_x','loc_y','lon','minutes_remaining','playoffs','seconds_remaining','period','shot_distance','shot_made_flag']
+cols = ['action_type','shot_type','shot_zone_basic','shot_zone_area','shot_zone_range', 'season','opponent']
 # lst = ['playoffs','seconds_remaining','shot_distance']
 
 
 data_x = data[lst]
 
 
-#label to binary features
-# data_sparse = data['shot_id']
-
-
 for col in cols:
 	d = pd.get_dummies(data[col])
 	data_x = pd.concat((data_x,d),axis=1)
-
-
-# data_sparse.drop('shot_id', axis=1)
-# U,s,V = np.linalg.svd(data_sparse.values,full_matrices=False)
-# d = 8
-# svd_features = np.dot(U[:,0:d],np.dot(np.diag(s[:d]),V.T[:,0:d].T))
-# print svd_features
-#
 
 
 data_x = factorize(data_x)
@@ -91,7 +81,7 @@ batchsize = [100,500,1000]
 #
 # file.close()
 
-
+print train_x.shape
 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
 sn = model.shoot_network(units=150,gpu=args.gpu)
