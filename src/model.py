@@ -55,7 +55,7 @@ class shoot_network():
 		if self.gpu >= 0:
 			print 'model to gpu'
 			self.model = network(len(x_train[0]),self.units,1).to_gpu()
-
+			print type(self.model)
 		else:
 			self.model = network(len(x_train[0]),self.units,1)
 
@@ -67,15 +67,11 @@ class shoot_network():
 			print('epoch', epoch)
 			# training
 			perm = np.random.permutation(N)
-			sum_accuracy = 0
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
 
 				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
 				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
-				if self.gpu >= 0:
-					x = x.to_gpu()
-					t = t.to_gpu()
 				# Pass the loss function (Classifier defines it) and its arguments
 				optimizer.update(self.model, x, t)
 				sum_loss += float(self.model.loss.data) / N
