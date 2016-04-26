@@ -59,59 +59,20 @@ train_x = train_x.values
 train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
+sn = model.shoot_network(units=1200,gpu=args.gpu)
+sn.fit(train_x,train_y,n_epoch=200,batchsize=1000,save=True)
 
-n_epoch = [100,200]
-units = [500,1000,1200,1500,2000]
-batchsize = [100,500,1000]
+ans = sn.predict(test_x)
+count  = 0
+test_data = data[pd.isnull(data.shot_made_flag)]
+for i,row in test_data.iterrows():
+	#print count,i
+	result = ans[count][0]
+	if result > 1: result = 1
+	elif result < 0: result = 0
+	output.write(str(row['shot_id'])+","+str(result)+'\n')
+	count += 1
 
-#
-# n_epoch = [1,2]
-# units = [1,2]
-# batchsize = [100,500]
-
-
-
-
-#
-# file = open('validation.csv','w')
-# file.write('error,units,batchsize,n_epoch\n')
-# for u in units:
-# 	for b in batchsize:
-# 		for n in n_epoch:
-# 			error = 0
-# 			for i in range(5):
-# 				X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
-# 				sn = model.shoot_network(units=u,gpu=args.gpu)
-# 				sn.fit(X_train,y_train,n_epoch=n,batchsize=b)
-# 				result = sn.predict(X_test)[:,0]
-# 				ans = np.sum((result - y_test) * (result - y_test))
-# 				error += ans
-# 			s = '%5.2f,%d,%d,%d\n' % (error/5,u,b,n)
-# 			file.write(s)
-#
-# file.close()
+output.close()
 
 
-
-X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
-sn = model.shoot_network(units=150,gpu=args.gpu)
-sn.fit(train_x,train_y,n_epoch=10,batchsize=1000,save=True)
-
-
-
-# answear csv
-#
-#
-# ans = sn.predict(test_x)
-# count  = 0
-# test_data = data[pd.isnull(data.shot_made_flag)]
-# for i,row in test_data.iterrows():
-# 	#print count,i
-# 	result = ans[count][0]
-# 	if result > 1: result = 1
-# 	elif result < 0: result = 0
-# 	output.write(str(row['shot_id'])+","+str(result)+'\n')
-# 	count += 1
-#
-# output.close()
-#
