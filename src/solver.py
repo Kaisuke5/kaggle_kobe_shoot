@@ -62,7 +62,7 @@ train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
 sn = model.shoot_network(units=150,gpu=args.gpu)
 
-sn.fit(train_x,train_y,n_epoch=200,batchsize=100)
+sn.fit(train_x,train_y,n_epoch=10,batchsize=500)
 # result = np.sqrt(np.sum(np.square(y-y_test)))
 #
 # units = [100,120,150,200,250,300]
