@@ -70,8 +70,8 @@ class shoot_network():
 			sum_loss = 0
 			for i in six.moves.range(0, N, batchsize):
 
-				x = chainer.Variable(self.xp.asarray(x_train[perm[i:i + batchsize]]))
-				t = chainer.Variable(self.xp.asarray(y_train[perm[i:i + batchsize]]))
+				x = chainer.Variable(self.xp.to_gpu(x_train[perm[i:i + batchsize]]))
+				t = chainer.Variable(self.xp.to_gpu(y_train[perm[i:i + batchsize]]))
 				# Pass the loss function (Classifier defines it) and its arguments
 				optimizer.update(self.model, x, t)
 				sum_loss += float(self.model.loss.data) / N
