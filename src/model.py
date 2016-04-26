@@ -46,7 +46,7 @@ class shoot_network():
 			self.xp = np
 
 
-	def fit(self,x_train,y_train,n_epoch=100, batchsize=30):
+	def fit(self,x_train,y_train,n_epoch=100, batchsize=300):
 		x_train = np.array(x_train, np.float32)
 		y_train = np.array(y_train, np.float32).reshape(len(y_train),1)
 		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=30)
