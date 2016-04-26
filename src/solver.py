@@ -9,6 +9,15 @@ import argparse
 def factorize(data):
 	return (data - np.mean(data,axis = 0)) / np.std(data,axis = 0)
 
+import scipy as sp
+def logloss(act, pred):
+	epsilon = 1e-15
+	pred = sp.maximum(epsilon, pred)
+	pred = sp.minimum(1-epsilon, pred)
+	ll = sum(act*sp.log(pred) + sp.subtract(1,act)*sp.log(sp.subtract(1,pred)))
+	ll = ll * -1.0/len(act)
+	return ll
+
 
 parser = argparse.ArgumentParser(description='kaggle kobe')
 parser.add_argument('--gpu', '-g', default=-1, type=int,help='gpu -1')
@@ -75,8 +84,10 @@ for u in units:
 				sn = model.shoot_network(units=u,gpu=args.gpu)
 				sn.fit(X_train,y_train,n_epoch=n,batchsize=b)
 				result = sn.predict(X_test)[:,0]
-				ans = np.sum((result - y_test) * (result - y_test))
-				error += ans
+				error = logloss(result,y_test)
+				print error
+				# ans = np.sum((result - y_test) * (result - y_test))
+				# error += ans
 			s = '%5.2f,%d,%d,%d\n' % (error/5,u,b,n)
 			file = open('validation.csv','a')
 			file.write(s)
