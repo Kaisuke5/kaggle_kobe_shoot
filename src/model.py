@@ -53,7 +53,11 @@ class shoot_network():
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
 		self.model = network(len(x_train[0]),self.units,1)
-		self.model.to_gpu()
+
+		if self.gpu >= 0:
+			self.model.to_gpu()
+
+
 		optimizer = optimizers.Adam()
 		optimizer.setup(self.model)
 		N = len(x_train)
