@@ -82,28 +82,3 @@ for u in units:
 			file.write(s)
 
 file.close()
-#
-# print train_x.shape
-#
-# X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.4, random_state=0)
-# sn = model.shoot_network(units=150,gpu=args.gpu)
-# sn.fit(train_x,train_y,n_epoch=10,batchsize=1000,save=True)
-#
-#
-
-# answear csv
-#
-#
-# ans = sn.predict(test_x)
-# count  = 0
-# test_data = data[pd.isnull(data.shot_made_flag)]
-# for i,row in test_data.iterrows():
-# 	#print count,i
-# 	result = ans[count][0]
-# 	if result > 1: result = 1
-# 	elif result < 0: result = 0
-# 	output.write(str(row['shot_id'])+","+str(result)+'\n')
-# 	count += 1
-#
-# output.close()
-#

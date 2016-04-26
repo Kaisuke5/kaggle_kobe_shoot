@@ -48,10 +48,6 @@ train_x = train_data.values
 train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
-print test_x,test_data
-
-
-
 
 sn = model.shoot_network(units=args.units,gpu=args.gpu)
 sn.fit(train_x,train_y,n_epoch=args.epoch,batchsize=args.batchsize,save=True)
@@ -60,11 +56,12 @@ count  = 0
 
 
 test_data = data[pd.isnull(data_x.shot_made_flag)]
+print ans.shape
 for i,row in test_data.iterrows():
 	#print count,i
 	result = ans[count][0]
-	if result > 1: result = 1
-	elif result < 0: result = 0
+	if result > 1: result = 1.0
+	elif result < 0: result = 0.0
 	output.write(str(row['shot_id'])+","+str(result)+'\n')
 	count += 1
 
