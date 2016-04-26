@@ -87,9 +87,9 @@ class shoot_network():
 					t = chainer.Variable(y_train[perm[i:i + batchsize]])
 
 				optimizer.update(self.model, x, t)
-				sum_loss += float(self.model.loss.data) / N
+				sum_loss += float(self.model.loss.data) * len(t)
 
-			print 'epoch %d mean_squared_error:%f' % (epoch,sum_loss)
+			print 'epoch %d mean_squared_error:%f' % (epoch,sum_loss/N)
 
 
 
