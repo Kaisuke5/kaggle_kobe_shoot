@@ -57,9 +57,9 @@ sn = model.shoot_network(units=args.units,gpu=args.gpu)
 sn.fit(train_x,train_y,n_epoch=args.epoch,batchsize=args.batchsize,save=True)
 ans = sn.predict(test_x)
 count  = 0
-test_data = test_x
 
 
+test_data = data[pd.isnull(data_x.shot_made_flag)]
 for i,row in test_data.iterrows():
 	#print count,i
 	result = ans[count][0]
