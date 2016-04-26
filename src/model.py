@@ -49,9 +49,10 @@ class shoot_network():
 	def fit(self,x_train,y_train,n_epoch=100, batchsize=300):
 		x_train = np.array(x_train, np.float32)
 		y_train = np.array(y_train, np.float32).reshape(len(y_train),1)
-		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=30)
+		self.train(x_train, y_train, n_epoch=n_epoch, batchsize=batchsize)
 
 	def train(self, x_train, y_train,n_epoch=100, batchsize=30):
+		print 'n_epoch:%d,batch_size:%d,units:%d' %(n_epoch,batchsize,self.units)
 		self.model = network(len(x_train[0]),self.units,1)
 		if self.gpu >= 0:
 			print 'model to gpu'
