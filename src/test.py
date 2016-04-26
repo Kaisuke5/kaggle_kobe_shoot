@@ -60,8 +60,8 @@ print ans.shape
 for i,row in test_data.iterrows():
 	#print count,i
 	result = ans[count][0]
-	if result > 1: result = 1.0
-	elif result < 0: result = 0.0
+	if result > 0.5: result = 1.0
+	elif result < 0.5: result = 0.0
 	output.write(str(row['shot_id'])+","+str(result)+'\n')
 	count += 1
 
