@@ -78,18 +78,18 @@ class shoot_network():
 			sum_loss = 0
 			errors = 0
 			for i in six.moves.range(0, N, batchsize):
-
-
+				x_b = x_train[perm[i:i + batchsize]]
+				y_b = y_train[perm[i:i + batchsize]]
 				if self.gpu >= 0:
-					x = chainer.Variable(cuda.to_gpu(x_train[perm[i:i + batchsize]]))
-					t = chainer.Variable(cuda.to_gpu(y_train[perm[i:i + batchsize]]))
+					x = chainer.Variable(cuda.to_gpu(x_b))
+					t = chainer.Variable(cuda.to_gpu(y_b))
 				else:
-					x = chainer.Variable(x_train[perm[i:i + batchsize]])
-					t = chainer.Variable(y_train[perm[i:i + batchsize]])
+					x = chainer.Variable(x_b)
+					t = chainer.Variable(y_b)
 
 				optimizer.update(self.model, x, t)
-				result = self.predict(x.data)[:,0]
-				errors += self.logloss(result,t.data)
+				result = self.predict(x_b)[:,0]
+				errors += self.logloss(result,y_b)
 				sum_loss += float(self.model.loss.data) * len(t)
 
 			print 'epoch %d mean_squared_error:%f logloss:%2.5f' % (epoch,sum_loss/N,errors/N)
