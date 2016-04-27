@@ -65,9 +65,6 @@ class shoot_network():
 			self.model.to_gpu()
 			print type(self.model)
 
-
-
-
 		optimizer = optimizers.Adam()
 		optimizer.setup(self.model)
 		N = len(x_train)
@@ -88,11 +85,11 @@ class shoot_network():
 					t = chainer.Variable(y_b)
 
 				optimizer.update(self.model, x, t)
-				result = self.predict(x_b)[:,0]
-				errors += self.logloss(result,y_b)
 				sum_loss += float(self.model.loss.data) * len(t)
 
-			print 'epoch %d mean_squared_error:%f logloss:%2.5f' % (epoch,sum_loss/N,errors/N)
+			t = self.predict(x_train)
+			logloss = self.logloss(y_train[:,0],t)
+			print 'epoch %d mean_squared_error:%f logloss:%2.5f' % (epoch,sum_loss/N,logloss)
 
 
 
@@ -108,6 +105,7 @@ class shoot_network():
 		epsilon = 1e-15
 		pred = sp.maximum(epsilon, pred)
 		pred = sp.minimum(1-epsilon, pred)
+		pred[pred >= 1] = 0.9999999
 		ll = sum(act*sp.log(pred) + sp.subtract(1,act)*sp.log(sp.subtract(1,pred)))
 		ll = ll * -1.0/len(act)
 		return ll
@@ -119,7 +117,7 @@ class shoot_network():
 		result = self.model.predict(x).data
 		if self.gpu >=0:
 			result = cuda.to_cpu(result)
-		return result
+		return result[:,0]
 
 
 

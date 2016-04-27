@@ -53,16 +53,13 @@ train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
 n_epoch = [50,100,150,200,250,300]
-units = [500,1000,1200,1500,2000]
-batchsize = [1000]
+units = [150,1000,1200,1500,2000]
+batchsize = [200]
 
 # #
 # n_epoch = [1,2]
 # units = [1,2]
 # batchsize = [100,500]
-
-
-
 
 c = 1
 file = open('validation.csv','w')
@@ -76,9 +73,11 @@ for u in units:
 				X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.2, random_state=0)
 				sn = model.shoot_network(units=u,gpu=args.gpu)
 				sn.fit(X_train,y_train,n_epoch=n,batchsize=b)
-				result = sn.predict(X_test)[:,0]
-				error = sn.logloss(result,y_test)
-				print error
+				# sn.fit(train_x,train_y,n_epoch=n,batchsize=b)
+				result = sn.predict(X_test)
+				error = sn.logloss(y_test,result)
+				print 'logloss is %2.5f' % error
+
 				# ans = np.sum((result - y_test) * (result - y_test))
 				# error += ans
 			s = '%3.5f,%d,%d,%d\n' % (error/c,u,b,n)
