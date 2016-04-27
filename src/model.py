@@ -88,7 +88,7 @@ class shoot_network():
 					t = chainer.Variable(y_train[perm[i:i + batchsize]])
 
 				optimizer.update(self.model, x, t)
-				result = self.predict(x)[:,0]
+				result = self.predict(x.data)[:,0]
 				errors += self.logloss(result,t)
 				sum_loss += float(self.model.loss.data) * len(t)
 
