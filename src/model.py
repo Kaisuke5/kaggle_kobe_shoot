@@ -89,7 +89,7 @@ class shoot_network():
 
 				optimizer.update(self.model, x, t)
 				result = self.predict(x.data)[:,0]
-				errors += self.logloss(result,t)
+				errors += self.logloss(result,t.data)
 				sum_loss += float(self.model.loss.data) * len(t)
 
 			print 'epoch %d mean_squared_error:%f logloss:%2.5f' % (epoch,sum_loss/N,errors/N)
