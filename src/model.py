@@ -8,7 +8,7 @@ from chainer import cuda
 import chainer.functions as F
 from chainer import optimizers
 import pickle
-
+import scipy as sp
 class network(chainer.Chain):
 
 	def __init__(self, n_in, n_units, n_out,):
@@ -76,6 +76,7 @@ class shoot_network():
 			# training
 			perm = np.random.permutation(N)
 			sum_loss = 0
+			errors = 0
 			for i in six.moves.range(0, N, batchsize):
 
 
@@ -87,9 +88,11 @@ class shoot_network():
 					t = chainer.Variable(y_train[perm[i:i + batchsize]])
 
 				optimizer.update(self.model, x, t)
+				result = self.predict(x)[:,0]
+				errors += self.logloss(result,t)
 				sum_loss += float(self.model.loss.data) * len(t)
 
-			print 'epoch %d mean_squared_error:%f' % (epoch,sum_loss/N)
+			print 'epoch %d mean_squared_error:%f logloss:%2.5f' % (epoch,sum_loss/N,errors/N)
 
 
 
@@ -100,6 +103,15 @@ class shoot_network():
 	# 		for name in self._children:
 	# 			d[name].to_gpu()
 	# 	return self
+
+	def logloss(self, act, pred):
+		epsilon = 1e-15
+		pred = sp.maximum(epsilon, pred)
+		pred = sp.minimum(1-epsilon, pred)
+		ll = sum(act*sp.log(pred) + sp.subtract(1,act)*sp.log(sp.subtract(1,pred)))
+		ll = ll * -1.0/len(act)
+		return ll
+
 
 
 	def predict(self,test_x):
