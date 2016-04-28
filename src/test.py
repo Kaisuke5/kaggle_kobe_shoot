@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn import cross_validation
-import model
+import model,model2
 import argparse
 
 
@@ -62,14 +62,14 @@ train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
 
-sn = model.shoot_network(units=args.units,gpu=args.gpu)
+sn = model2.degit_network(units=args.units,gpu=args.gpu)
 
-if args.train > 1:
+if args.train > 0:
 	print 'predict validation test set'
 	X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.2, random_state=0)
 	sn.fit(X_train,y_train,n_epoch=args.epoch,batchsize=args.batchsize,save=False)
 	pred = sn.predict(X_test)
-	print sn.logloss(y_test,pred)
+	print 'logloss of test set:',sn.logloss(y_test,pred)
 
 sn.fit(train_x,train_y,n_epoch=args.epoch,batchsize=args.batchsize,save=False)
 ans = sn.predict(test_x)
@@ -81,8 +81,6 @@ print ans.shape
 for i,row in test_data.iterrows():
 	#print count,i
 	result = ans[count]
-	if result > 0.6: result = 1.0
-	elif result < 0.4: result = 0.0
 	output.write(str(row['shot_id'])+","+str(result)+'\n')
 	count += 1
 
