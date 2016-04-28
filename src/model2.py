@@ -87,7 +87,9 @@ class degit_network():
 				sum_loss += float(self.model.loss.data) * len(t.data)
 				accuracy += float(self.model.accuracy.data) * len(t.data)
 
-			print 'epoch %d mean_squared_error:%f accuracy:%f' % (epoch,sum_loss/N,accuracy/N)
+			t = self.predict(x_train)
+			logloss = self.logloss(y_train[:,0],t)
+			print 'epoch %d mean_squared_error:%f accuracy:%f log:%f' % (epoch,sum_loss/N,accuracy/N,logloss)
 
 
 
