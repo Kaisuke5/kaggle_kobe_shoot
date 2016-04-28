@@ -2,13 +2,12 @@ import numpy as np
 import six
 import chainer.links as L
 import chainer
-print chainer.__version__
 from chainer import computational_graph as c
 from chainer import cuda
 import chainer.functions as F
 from chainer import optimizers
 import pickle
-
+import scipy as sp
 class network(chainer.Chain):
 
 	def __init__(self, n_in, n_units, n_out):
@@ -66,9 +65,6 @@ class degit_network():
 			self.model.to_gpu()
 			print type(self.model)
 
-
-
-
 		optimizer = optimizers.Adam()
 		optimizer.setup(self.model)
 		N = len(x_train)
@@ -103,6 +99,16 @@ class degit_network():
 	# 			d[name].to_gpu()
 	# 	return self
 
+
+
+	def logloss(self, act, pred):
+		epsilon = 1e-15
+		pred = sp.maximum(epsilon, pred)
+		pred = sp.minimum(1-epsilon, pred)
+		pred[pred >= 1] = 0.9999999
+		ll = sum(act*sp.log(pred) + sp.subtract(1,act)*sp.log(sp.subtract(1,pred)))
+		ll = ll * -1.0/len(act)
+		return ll
 
 	def predict(self,test_x):
 		x = chainer.Variable(self.xp.asarray(test_x, self.xp.float32))
