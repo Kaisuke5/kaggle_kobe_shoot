@@ -4,6 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import cross_validation
 import model,model2
 import argparse
+from sklearn import svm
 
 
 import scipy as sp
@@ -61,12 +62,21 @@ train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
 
+# sn = model2.degit_network(units=args.units,gpu=args.gpu)
+sn = model.shoot_network(units=args.units,gpu=args.gpu)
 
-sn = model2.degit_network(units=args.units,gpu=args.gpu)
+
 
 if args.train > 0:
 	print 'predict validation test set'
 	X_train, X_test, y_train, y_test = cross_validation.train_test_split(train_x, train_y, test_size=0.2, random_state=0)
+
+	clf = svm.SVC()
+	clf.fit(X_train, y_train)
+	pred = clf.fit(X_test)
+
+	print 'svm logloss',sn.logloss(y_test,pred)
+
 	sn.fit(X_train,y_train,n_epoch=args.epoch,batchsize=args.batchsize,save=False)
 	pred = sn.predict(X_test)
 	print 'logloss of test set:',sn.logloss(y_test,pred)
