@@ -59,7 +59,13 @@ def xgboost_mappedvec(df):
     test_y_vec = clf.predict_proba(test_x_vec)[:, 1]
     return test_y_vec
 
+
+def f(data):
+    return (data - np.mean(data,axis = 0)) / np.std(data,axis = 0)
+
+
 def NN_mappedvec(df):
+
     x_mapper, y_mapper = mapper(df)
     train_df, test_df = split(df)
     train_x_vec = x_mapper.transform(train_df.copy())
@@ -67,9 +73,9 @@ def NN_mappedvec(df):
     test_x_vec = x_mapper.transform(test_df.copy())
 
     print train_x_vec.shape
-    clf = model.shoot_network(1500,gpu=1)
-    clf.fit(train_x_vec, train_y_vec,n_epoch=50,batchsize=1000)
-    test_y_vec = clf.predict(test_x_vec)
+    clf = model.shoot_network(2500,gpu=1)
+    clf.fit(f(train_x_vec), f(train_y_vec),n_epoch=150,batchsize=500)
+    test_y_vec = clf.predict(f(test_x_vec))
     return test_y_vec
 
 def preproc(df):
