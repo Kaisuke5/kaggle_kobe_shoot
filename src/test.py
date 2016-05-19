@@ -5,8 +5,7 @@ from sklearn import cross_validation
 import model,model2
 import argparse
 from sklearn import svm
-
-
+from xgboost.sklearn import XGBClassifier
 import scipy as sp
 def logloss(act, pred):
 	epsilon = 1e-15
@@ -15,7 +14,11 @@ def logloss(act, pred):
 	ll = sum(act*sp.log(pred) + sp.subtract(1,act)*sp.log(sp.subtract(1,pred)))
 	ll = ll * -1.0/len(act)
 	return ll
-
+def makesubmission(predict_y, savename="submission99.csv"):
+	submit_df = pd.read_csv('../data/' + "sample_submission.csv")
+	submit_df["shot_made_flag"] = predict_y
+	submit_df = submit_df.fillna(np.nanmean(predict_y))
+	submit_df.to_csv(savename, index=False)
 
 def factorize(data):
 	return (data - np.mean(data,axis = 0)) / np.std(data,axis = 0)
@@ -60,8 +63,12 @@ train_x = train_data.values
 train_y = data[-pd.isnull(data_x.shot_made_flag)]['shot_made_flag'].values
 
 
+clf = XGBClassifier(max_depth=6, learning_rate=0.01, n_estimators=550, subsample=0.5, colsample_bytree=0.5, seed=0)
+clf.fit(train_x, train_y)
+test_y= clf.predict_proba(test_x)[:, 1]
+makesubmission(test_y)
 
-
+print 'done'
 # sn = model2.degit_network(units=args.units,gpu=args.gpu)
 sn = model.shoot_network(units=args.units,gpu=args.gpu)
 
