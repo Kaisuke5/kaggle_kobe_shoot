@@ -25,7 +25,7 @@ if __name__ == "__main__":
     for i in range(N):
         xgb = XGBClassifier(max_depth=random.randint(4,8), learning_rate=random.uniform(0.01,0.05), n_estimators=random.randint(300,700), subsample=0.5, colsample_bytree=0.5, seed=0)
         xgb.fit(train_x,train_y)
-        result = xgb.predict(test_x)[:,1]
+        result = xgb.predict_proba(test_x)[:,1]
         ans +=  result
 
-    makesubmission(ans/N)
+    makesubmission(ans/N,savename='iter.csv')

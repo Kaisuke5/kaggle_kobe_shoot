@@ -2,17 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="44a9c09a-d135-4098-9b1c-8de76d9e9831" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/model_factory.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/models/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/xgboost_iterations.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/ans.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/log2" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/data.py" afterPath="$PROJECT_DIR$/src/models/data.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/model.py" afterPath="$PROJECT_DIR$/src/models/model.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/model2.py" afterPath="$PROJECT_DIR$/src/models/model2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test.py" afterPath="$PROJECT_DIR$/src/test.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/xgboost_iterations.py" afterPath="$PROJECT_DIR$/src/xgboost_iterations.py" />
     </list>
     <ignored path="kobe.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -109,8 +99,8 @@
           <file leaf-file-name="xgboost_iterations.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/xgboost_iterations.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.5325444">
-                  <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+                <state vertical-scroll-proportion="0.66568047">
+                  <caret line="30" column="43" selection-start-line="30" selection-start-column="43" selection-end-line="30" selection-end-column="43" />
                   <folding>
                     <element signature="e#0#26#0" expanded="true" />
                   </folding>
@@ -570,7 +560,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -986,8 +976,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/xgboost_iterations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5325444">
-          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.66568047">
+          <caret line="30" column="43" selection-start-line="30" selection-start-column="43" selection-end-line="30" selection-end-column="43" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
